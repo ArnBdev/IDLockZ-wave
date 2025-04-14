@@ -243,6 +243,11 @@ class IDlock202 extends ZwaveDevice {
       .filter(event => event.details.code === code)
       .slice(0, limit)
   }
+
+  async onInit() {
+    this.log('ID Lock 202 initialized');
+    this.registerCapability('lock', 'LOCK');
+  }
 }
 
 module.exports = IDlock202

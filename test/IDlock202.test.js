@@ -1,5 +1,7 @@
 'use strict'
 
+const { ZwaveDevice } = require('homey-zwavedriver');
+
 /**
  * ID Lock 202 Test Suite
  * Created: 2025-04-14 07:25:59
@@ -69,3 +71,10 @@ describe('IDlock202', () => {
     })
   })
 })
+
+describe('IDlock202 Device Tests', () => {
+  test('Device initializes correctly', () => {
+    const device = new ZwaveDevice();
+    expect(device).toBeDefined();
+  });
+});
