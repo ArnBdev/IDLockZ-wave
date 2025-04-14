@@ -1,0 +1,88 @@
+﻿{
+    "sections": [
+      {
+        "id": "general",
+        "title": {
+          "en": "General settings",
+          "no": "Generelle innstillinger"
+        },
+        "capabilities": [
+          {
+            "name": "autolock_enabled",
+            "type": "checkbox",
+            "title": {
+              "en": "Auto lock",
+              "no": "Automatisk låsing"
+            },
+            "default": true
+          },
+          {
+            "name": "autolock_time",
+            "type": "number",
+            "title": {
+              "en": "Auto lock delay (seconds)",
+              "no": "Forsinkelse automatisk låsing (sekunder)"
+            },
+            "min": 10,
+            "max": 240,
+            "default": 30
+          }
+        ]
+      },
+      {
+        "id": "recurring_codes",
+        "title": {
+          "en": "Recurring Code Settings",
+          "no": "Innstillinger for periodevise koder"
+        },
+        "capabilities": [
+          {
+            "name": "recurring_codes_enabled",
+            "type": "checkbox",
+            "title": {
+              "en": "Enable recurring codes",
+              "no": "Aktiver periodevise koder"
+            },
+            "default": true
+          },
+          {
+            "name": "default_schedule",
+            "type": "group",
+            "title": {
+              "en": "Default schedule for new recurring codes",
+              "no": "Standard tidsskjema for nye periodevise koder"
+            },
+            "children": [
+              {
+                "name": "workdays_only",
+                "type": "checkbox",
+                "title": {
+                  "en": "Workdays only",
+                  "no": "Kun arbeidsdager"
+                },
+                "default": true
+              },
+              {
+                "name": "start_time",
+                "type": "time",
+                "title": {
+                  "en": "Start time",
+                  "no": "Starttid"
+                },
+                "default": "08:00"
+              },
+              {
+                "name": "end_time",
+                "type": "time",
+                "title": {
+                  "en": "End time",
+                  "no": "Sluttid"
+                },
+                "default": "17:00"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
