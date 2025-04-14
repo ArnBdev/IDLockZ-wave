@@ -63,3 +63,18 @@ homey app build
 
 # Deploye til Homey
 homey app deploy
+```
+
+## Testing og Feilsøking
+- Fullførte testing av `IDlock202` med Jest.
+- Rettet feil i mockene for `emergencyManager` og `codeManager`.
+- Alle tester passerte etter oppdatering av mockene.
+
+## Problemer med Homey CLI
+- Møtte på feilen "The term 'homey' is not recognized".
+- Løst ved å installere Homey CLI globalt med `npm install -g homey`.
+- Sørget for at Homey CLI er i PATH.
+
+## JSON-feil i driver.compose.json
+- Oppdaget en feil i `driver.compose.json` for `IDlock202`.
+- Løst ved å rette opp ugyldig JSON-syntaks.

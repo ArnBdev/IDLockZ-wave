@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 class ZwaveDevice {
   constructor() {
@@ -6,6 +6,9 @@ class ZwaveDevice {
   }
 
   log() {}
+  error(message, error) {
+    console.error(message, error); // Mock logging for errors
+  }
   onInit() {}
   registerCapability(capability, commandClass) {
     this.capabilities[capability] = commandClass;
@@ -15,10 +18,3 @@ class ZwaveDevice {
 module.exports = {
   ZwaveDevice,
 };
-
-"jest": {
-  "moduleNameMapper": {
-    "^homey$": "<rootDir>/__mocks__/homey.js",
-    "^homey-zwavedriver$": "<rootDir>/__mocks__/homey-zwavedriver.js"
-  }
-}
