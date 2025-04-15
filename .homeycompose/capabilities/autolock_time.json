@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Auto Lock Delay",
+    "no": "Forsinkelse automatisk låsing"
+  },
+  "units": {
+    "en": "seconds",
+    "no": "sekunder"
+  },
+  "min": 10,
+  "max": 240,
+  "step": 1,
+  "getable": true,
+  "setable": true,
+  "uiComponent": "slider",
+  "icon": "/assets/capability_icons/timer.svg"
+}

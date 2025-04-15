@@ -1,62 +1,47 @@
 {
-    "id": "no.idlock",
-    "sdk": 3,
-    "name": {
-      "en": "ID Lock"
-    },
-    "brandColor": "#000000",
-    "version": "2.0.0",
-    "compatibility": ">=8.0.0",
-    "athomForumDiscussionId": 4386,
-    "homeyCommunityTopicId": 161,
-    "support": "https://community.athom.com/t/161",
-    "author": {
-      "name": "Ted Tolboom",
-      "email": "dTNL.Homey@gmail.com"
-    },
-    "platforms": [
-      "local"
-    ],
-    "contributors": {
-      "developers": [
-        {
-          "name": "Ted Tolboom",
-          "email": "dTNL.Homey@gmail.com"
-        },
-        {
-          "name": "Mats Paulsen",
-          "email": "mats@paulsen.one"
-        },
-        {
-          "name": "Jonathan Cohen",
-          "email": "jonathan@cohen.se"
-        },
-        {
-          "name": "Rune Moskvil Lyngås",
-          "email": "runely85@gmail.com"
-        }
-      ]
-    },
-    "contributing": {
-      "donate": {
-        "paypal": {
-          "username": "TedTolboom"
+  "id": "com.idlock.zwave",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": ["local"],
+  "name": {
+    "en": "ID Lock Z-Wave",
+    "no": "ID Lock Z-Wave"
+  },
+  "description": {
+    "en": "Control your ID Lock with Homey",
+    "no": "Styr din ID Lock med Homey"
+  },
+  "category": ["security"],
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "author": {
+    "name": "ID Lock AS",
+    "email": "support@idlock.no"
+  },
+  "zwaveDevices": {
+    "IDLock202": {
+      "manufacturerId": 635,
+      "productTypeId": 1,
+      "productId": 770,
+      "learnmode": {
+        "image": "/drivers/IDlock202/assets/learnmode.svg",
+        "instruction": {
+          "en": "Press and hold key button (3 sec), enter [Master PIN] + [*], then [9] + [*], finally [1]",
+          "no": "Hold nøkkelknappen (3 sek), tast [Master PIN] + [*], så [9] + [*], til slutt [1]"
         }
       }
-    },
-    "description": {
-      "en": "Adds support for ID Lock Z-wave devices",
-      "no": "Legger til støtte for ID Lock Z-wave enheter"
-    },
-    "images": {
-      "large": "/assets/images/large.png",
-      "small": "/assets/images/small.png"
-    },
-    "category": "security",
-    "tags": {
-      "en": [
-        "door",
-        "lock"
-      ]
     }
+  },
+  "drivers": [
+    {
+      "id": "IDlock202",
+      "name": { "en": "ID Lock 202", "no": "ID Lock 202" },
+      "class": "lock",
+      "src": "drivers/IDlock202"
+    }
+  ]
 }
