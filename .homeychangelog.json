@@ -1,5 +1,6 @@
 {
-  "2.0.0": {
-    "en": "Update app to SDK3 to make it compatible to Homey Pro (Early '23)"
+  "2.0.1": {
+    "en": "Improved Z-Wave implementation documentation. Updated device driver with auto-lock handling. Added detailed technical analysis in memory bank.",
+    "no": "Forbedret Z-Wave implementasjonsdokumentasjon. Oppdatert enhetsdriveren med auto-lås håndtering. Lagt til detaljert teknisk analyse i memory bank."
   }
 }

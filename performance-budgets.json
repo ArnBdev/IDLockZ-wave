@@ -1,0 +1,83 @@
+{
+  "thresholds": {
+    "versionUpdate": {
+      "warning": 800,
+      "error": 1000,
+      "regression": 10
+    },
+    "release": {
+      "warning": 2500,
+      "error": 3000,
+      "regression": 15
+    },
+    "rollback": {
+      "warning": 1200,
+      "error": 1500,
+      "regression": 10
+    },
+    "memory": {
+      "heapUsed": {
+        "warning": 100,
+        "error": 150,
+        "regression": 5
+      },
+      "rss": {
+        "warning": 200,
+        "error": 300,
+        "regression": 10
+      }
+    }
+  },
+  "ci": {
+    "failOnError": true,
+    "warnOnRegression": true,
+    "allowedRegressions": 1,
+    "requiredSamples": 5,
+    "stabilityThreshold": 3
+  },
+  "reporting": {
+    "notifications": {
+      "slack": {
+        "threshold": "error",
+        "channel": "#performance"
+      },
+      "email": {
+        "threshold": "warning",
+        "recipients": ["dev-team@idlock.no"]
+      },
+      "github": {
+        "threshold": "warning",
+        "labels": ["performance"]
+      }
+    },
+    "metrics": {
+      "capture": [
+        "mean",
+        "p95",
+        "max",
+        "min",
+        "stddev"
+      ],
+      "trends": {
+        "period": "7d",
+        "samples": 10
+      }
+    }
+  },
+  "environments": {
+    "ci": {
+      "warmup": 2,
+      "samples": 5,
+      "maxRetries": 3
+    },
+    "local": {
+      "warmup": 1,
+      "samples": 3,
+      "maxRetries": 1
+    }
+  },
+  "ignorePatterns": [
+    "test/**/*.js",
+    "scripts/debug.js"
+  ]
+}

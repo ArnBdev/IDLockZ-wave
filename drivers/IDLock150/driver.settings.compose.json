@@ -1,0 +1,68 @@
+[
+    {
+        "id": "monitoringEnabled",
+        "type": "checkbox",
+        "value": true,
+        "label": {
+            "en": "Enable performance monitoring",
+            "no": "Aktiver ytelsesovervåking"
+        }
+    },
+    {
+        "id": "monitoringInterval",
+        "type": "number",
+        "value": 5,
+        "label": {
+            "en": "Monitoring interval",
+            "no": "Overvåkingsintervall"
+        },
+        "hint": {
+            "en": "How often to collect metrics (minutes)",
+            "no": "Hvor ofte data samles inn (minutter)"
+        },
+        "min": 1,
+        "max": 60,
+        "step": 1
+    },
+    {
+        "id": "batteryWarningThreshold",
+        "type": "number",
+        "value": 15,
+        "label": {
+            "en": "Battery warning threshold (%)",
+            "no": "Batterivarselsgrense (%)"
+        },
+        "hint": {
+            "en": "Battery percentage to trigger warning",
+            "no": "Batteriprosent for å utløse varsel"
+        },
+        "min": 5,
+        "max": 50,
+        "step": 5
+    },
+    {
+        "id": "memoryWarningThreshold",
+        "type": "number",
+        "value": 85,
+        "label": {
+            "en": "Memory warning threshold (%)",
+            "no": "Minnebruksgrense (%)"
+        },
+        "hint": {
+            "en": "Memory usage percentage to trigger warning",
+            "no": "Minnebruk i prosent for å utløse varsel"
+        },
+        "min": 50,
+        "max": 95,
+        "step": 5
+    },
+    {
+        "id": "performanceStatus",
+        "type": "label",
+        "value": "Monitoring active",
+        "label": {
+            "en": "Status",
+            "no": "Status"
+        }
+    }
+]

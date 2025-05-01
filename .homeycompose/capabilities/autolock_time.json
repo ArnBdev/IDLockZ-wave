@@ -1,18 +1,22 @@
 {
   "type": "number",
   "title": {
-    "en": "Auto Lock Delay",
-    "no": "Forsinkelse automatisk låsing"
+    "en": "Auto Lock Time",
+    "no": "Automatisk låsetid"
   },
   "units": {
     "en": "seconds",
     "no": "sekunder"
   },
-  "min": 10,
+  "min": 0,
   "max": 240,
   "step": 1,
+  "decimals": 0,
+  "chartType": "stepLine",
+  "insights": true,
   "getable": true,
   "setable": true,
   "uiComponent": "slider",
-  "icon": "/assets/capability_icons/timer.svg"
+  "icon": "/assets/timer.svg",
+  "values": []
 }

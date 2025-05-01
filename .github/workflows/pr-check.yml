@@ -1,0 +1,159 @@
+name: Performance Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/**'
+      - 'drivers/**'
+      - 'lib/**'
+      - '**.js'
+
+jobs:
+  performance-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Get base branch performance
+      run: |
+        git checkout ${{ github.base_ref }}
+        node scripts/benchmark.js
+        mv benchmark-results.json base-results.json
+
+    - name: Get PR performance
+      run: |
+        git checkout ${{ github.head_ref }}
+        node scripts/benchmark.js
+        mv benchmark-results.json pr-results.json
+
+    - name: Compare performance
+      id: compare
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const baseResults = JSON.parse(fs.readFileSync('base-results.json', 'utf8'));
+          const prResults = JSON.parse(fs.readFileSync('pr-results.json', 'utf8'));
+          
+          const metrics = ['versionUpdate', 'release', 'rollback'];
+          const threshold = 0.1; // 10% degradation threshold
+          
+          let degradation = false;
+          let comment = '## Performance Impact\n\n';
+          
+          metrics.forEach(metric => {
+            const baseValue = baseResults.results[metric].mean;
+            const prValue = prResults.results[metric].mean;
+            const change = ((prValue - baseValue) / baseValue) * 100;
+            
+            const status = change > threshold * 100 ? '🔴' : 
+                          change < 0 ? '🟢' : '🟡';
+            
+            comment += `### ${metric}\n`;
+            comment += `${status} ${change.toFixed(2)}% change\n`;
+            comment += `- Base: ${baseValue.toFixed(2)}ms\n`;
+            comment += `- PR: ${prValue.toFixed(2)}ms\n\n`;
+            
+            if (change > threshold * 100) {
+              degradation = true;
+            }
+          });
+          
+          // Memory impact
+          const baseMemory = baseResults.results.memoryUsage.heapUsed;
+          const prMemory = prResults.results.memoryUsage.heapUsed;
+          const memoryChange = ((prMemory - baseMemory) / baseMemory) * 100;
+          
+          comment += `### Memory Usage\n`;
+          comment += `${memoryChange > 5 ? '🔴' : memoryChange < 0 ? '🟢' : '🟡'} ${memoryChange.toFixed(2)}% change\n`;
+          comment += `- Base: ${(baseMemory).toFixed(2)}MB\n`;
+          comment += `- PR: ${(prMemory).toFixed(2)}MB\n\n`;
+          
+          if (memoryChange > 5) {
+            degradation = true;
+          }
+          
+          // Add recommendation
+          if (degradation) {
+            comment += '\n⚠️ **Performance degradation detected!** Please review changes.';
+          } else {
+            comment += '\n✅ Performance impact is within acceptable ranges.';
+          }
+          
+          // Create or update comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number
+          });
+          
+          const performanceComment = comments.find(comment => 
+            comment.body.includes('## Performance Impact')
+          );
+          
+          if (performanceComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: performanceComment.id,
+              body: comment
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+          }
+          
+          // Set output for next steps
+          core.setOutput('degradation', degradation.toString());
+
+    - name: Create status check
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const degradation = ${{ steps.compare.outputs.degradation }} === 'true';
+          
+          await github.rest.checks.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            name: 'Performance Impact',
+            head_sha: context.sha,
+            status: 'completed',
+            conclusion: degradation ? 'neutral' : 'success',
+            output: {
+              title: degradation ? 'Performance impact detected' : 'Performance impact acceptable',
+              summary: 'See PR comments for details'
+            }
+          });
+
+  update-badge:
+    needs: performance-check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Generate badge
+      uses: schneegans/dynamic-badges-action@v1.6.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: performance-badge
+        filename: performance.json
+        label: performance
+        message: ${{ steps.compare.outputs.degradation == 'true' && '🔴 regression' || '🟢 stable' }}
+        color: ${{ steps.compare.outputs.degradation == 'true' && 'red' || 'brightgreen' }}

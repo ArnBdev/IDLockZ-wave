@@ -1,0 +1,160 @@
+{
+  "name": {
+    "en": "ID Lock 202",
+    "no": "ID Lock 202"
+  },
+  "class": "lock",
+  "capabilities": [
+    "locked",
+    "measure_battery",
+    "contact_alarm",
+    "onoff",
+    "dim"
+  ],
+  "capabilitiesOptions": {
+    "onoff": {
+      "title": {
+        "en": "Auto Lock",
+        "no": "Auto-lås"
+      }
+    },
+    "dim": {
+      "title": {
+        "en": "Auto Lock Delay",
+        "no": "Auto-lås forsinkelse"
+      },
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "units": {
+        "en": "seconds",
+        "no": "sekunder"
+      }
+    },
+    "contact_alarm": {
+      "title": {
+        "en": "Door State",
+        "no": "Dørstatus"
+      }
+    },
+    "locked": {
+      "title": {
+        "en": "Lock State",
+        "no": "Låsestatus"
+      }
+    },
+    "measure_battery": {
+      "title": {
+        "en": "Battery",
+        "no": "Batteri"
+      }
+    }
+  },
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "Lock Settings",
+        "no": "Låsinnstillinger"
+      },
+      "children": [
+        {
+          "id": "auto_lock_enabled",
+          "type": "checkbox",
+          "value": false,
+          "label": {
+            "en": "Auto Lock",
+            "no": "Auto-lås"
+          },
+          "hint": {
+            "en": "Enable automatic locking after door is closed",
+            "no": "Aktiver automatisk låsing når døren lukkes"
+          }
+        },
+        {
+          "id": "auto_lock_time",
+          "type": "dropdown",
+          "value": "10",
+          "label": {
+            "en": "Auto Lock Delay",
+            "no": "Auto-lås forsinkelse"
+          },
+          "hint": {
+            "en": "Time before auto-locking (seconds)",
+            "no": "Tid før auto-låsing (sekunder)"
+          },
+          "values": [
+            {
+              "id": "5",
+              "label": {
+                "en": "5 seconds",
+                "no": "5 sekunder"
+              }
+            },
+            {
+              "id": "10",
+              "label": {
+                "en": "10 seconds",
+                "no": "10 sekunder"
+              }
+            },
+            {
+              "id": "15",
+              "label": {
+                "en": "15 seconds",
+                "no": "15 sekunder"
+              }
+            },
+            {
+              "id": "30",
+              "label": {
+                "en": "30 seconds",
+                "no": "30 sekunder"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "platforms": ["local"],
+  "connectivity": ["zwave"],
+  "zwave": {
+    "manufacturerId": 883,
+    "productTypeId": 3,
+    "productId": 1,
+    "productDocumentation": "https://products.z-wavealliance.org/products/2845",
+    "zwaveAllianceProductId": 2845,
+    "requireSecure": true,
+    "sec2": false,
+    "secureInclusionExclusively": true,
+    "learnmode": {
+      "image": "/drivers/IDLock150/assets/learnmode.svg",
+      "instruction": {
+        "en": "Follow these steps carefully:\n\n1. Make sure the lock is awake (press any button)\n2. In Homey, click the + button to add device\n3. On the lock keypad enter: * 9 # 1 followed by the Master PIN\n4. Press # to specifically request secure inclusion\n5. The lock will show a rotating pattern during inclusion\n6. Wait for the inclusion process to complete\n\nNOTE: If the process fails, remove the lock first:\n1. In Homey, remove the device\n2. On the lock enter: * 9 # 3 followed by Master PIN\n3. Try inclusion again",
+        "no": "Følg disse trinnene nøye:\n\n1. Påse at låsen er våken (trykk en vilkårlig tast)\n2. I Homey, klikk + knappen for å legge til enhet\n3. På låsens tastatur tast inn: * 9 # 1 etterfulgt av Master PIN\n4. Trykk # for å spesifikt be om sikker inkludering\n5. Låsen vil vise et roterende mønster under inkludering\n6. Vent til inkluderingsprosessen er fullført\n\nMERK: Hvis prosessen feiler, fjern låsen først:\n1. I Homey, fjern enheten\n2. På låsen tast inn: * 9 # 3 etterfulgt av Master PIN\n3. Prøv inkludering på nytt"
+      }
+    },
+    "associationGroups": [1],
+    "associationGroupsOptions": {
+      "1": {
+        "hint": {
+          "en": "Lifeline association group",
+          "no": "Lifeline assosiasjonsgruppe"
+        }
+      }
+    },
+    "defaultConfiguration": [
+      {
+        "id": 1,
+        "size": 1,
+        "value": 0
+      },
+      {
+        "id": 5,
+        "size": 1,
+        "value": 0
+      }
+    ]
+  }
+}

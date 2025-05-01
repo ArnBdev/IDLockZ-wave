@@ -1,293 +1,124 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
-  "id": "com.idlock.zwave",
-  "version": "1.0.0",
+  "id": "com.idlock",
+  "version": "2.0.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
     "local"
   ],
+  "brandColor": "#000000",
   "name": {
-    "en": "ID Lock Z-Wave",
-    "no": "ID Lock Z-Wave"
+    "en": "ID Lock",
+    "no": "ID Lock"
   },
   "description": {
-    "en": "Control your ID Lock with Homey",
-    "no": "Styr din ID Lock med Homey"
+    "en": "Control your ID Lock with Homey - Manage PIN codes, RFID tags, and monitor access",
+    "no": "Kontroller din ID Lock med Homey - Administrer PIN-koder, RFID-brikker og overvåk tilgang"
   },
-  "category": [
-    "security"
+  "category": "security",
+  "permissions": [
+    "homey:manager:api"
   ],
-  "permissions": [],
   "images": {
     "large": "/assets/images/large.png",
     "small": "/assets/images/small.png"
   },
   "author": {
     "name": "ID Lock AS",
-    "email": "support@idlock.no"
+    "email": "support@idlock.no",
+    "website": "https://idlock.no"
   },
-  "zwaveDevices": {
-    "IDLock202": {
-      "manufacturerId": 635,
-      "productTypeId": 1,
-      "productId": 770,
-      "learnmode": {
-        "image": "/drivers/IDlock202/assets/learnmode.svg",
-        "instruction": {
-          "en": "Press and hold key button (3 sec), enter [Master PIN] + [*], then [9] + [*], finally [1]",
-          "no": "Hold nøkkelknappen (3 sek), tast [Master PIN] + [*], så [9] + [*], til slutt [1]"
-        }
-      }
-    }
+  "tags": {
+    "en": [
+      "lock",
+      "door",
+      "security",
+      "pin",
+      "code",
+      "rfid"
+    ],
+    "no": [
+      "lås",
+      "dør",
+      "sikkerhet",
+      "pin",
+      "kode",
+      "rfid"
+    ]
   },
   "flow": {
     "triggers": [
       {
         "id": "door_lock",
         "title": {
-          "en": "A specific user locked the door",
-          "sv": "En specifik användare låste dörren",
-          "no": "En spesifikk bruker låste døren"
+          "en": "Lock was locked",
+          "no": "Lås ble låst"
         },
-        "titleFormatted": {
-          "en": "[[who]] locked the door with [[type]]",
-          "sv": "[[who]] låste dörren med [[type]]",
-          "no": "[[who]] låste døren med [[type]]"
+        "hint": {
+          "en": "Triggers when the lock is locked (any method)",
+          "no": "Utløses når låsen blir låst (alle metoder)"
         },
-        "tokens": [
-          {
-            "name": "who",
-            "type": "string",
-            "title": {
-              "en": "Who",
-              "sv": "Namn",
-              "no": "Navn"
-            },
-            "example": {
-              "en": "Peter"
-            }
-          },
-          {
-            "name": "type",
-            "type": "string",
-            "title": {
-              "en": "Type",
-              "sv": "Typ",
-              "no": "Type"
-            },
-            "example": {
-              "en": "Code",
-              "sv": "Kod",
-              "no": "Kode"
-            }
-          }
-        ],
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
-          },
+            "filter": "driver_id=IDLock150"
+          }
+        ],
+        "tokens": [
           {
-            "name": "who",
-            "type": "autocomplete",
-            "placeholder": {
-              "en": "Type name...",
-              "sv": "Ange namn..",
-              "no": "Angi navn..."
-            },
+            "name": "method",
+            "type": "string",
             "title": {
-              "en": "Who",
-              "sv": "Namn",
-              "no": "Navn"
+              "en": "Method",
+              "no": "Metode"
+            },
+            "example": {
+              "en": "Auto Lock",
+              "no": "Auto-lås"
             }
-          },
-          {
-            "name": "type",
-            "type": "dropdown",
-            "placeholder": {
-              "en": "Choose a value...",
-              "sv": "Välj en typ...",
-              "no": "Velg en type..."
-            },
-            "title": {
-              "en": "Type",
-              "sv": "Typ",
-              "no": "Type"
-            },
-            "values": [
-              {
-                "id": "any",
-                "label": {
-                  "en": "Any",
-                  "sv": "Alla",
-                  "no": "Alle"
-                }
-              },
-              {
-                "id": "code",
-                "label": {
-                  "en": "Code",
-                  "sv": "Kod",
-                  "no": "Kode"
-                }
-              },
-              {
-                "id": "tag",
-                "label": {
-                  "en": "Tag",
-                  "sv": "Tag",
-                  "no": "Tag"
-                }
-              },
-              {
-                "id": "automatic",
-                "label": {
-                  "en": "Automatic",
-                  "sv": "Automatiskt",
-                  "no": "Automatisk"
-                }
-              },
-              {
-                "id": "button",
-                "label": {
-                  "en": "Button",
-                  "sv": "Knapp/vred",
-                  "no": "Knapp"
-                }
-              },
-              {
-                "id": "homey",
-                "label": {
-                  "en": "Homey"
-                }
-              }
-            ]
           }
         ]
       },
       {
         "id": "door_unlock",
         "title": {
-          "en": "A specific user unlocked the door",
-          "sv": "En specifik användare låste upp dörren",
-          "no": "En spesifikk bruker låste opp døren"
+          "en": "Lock was unlocked",
+          "no": "Lås ble låst opp"
         },
-        "titleFormatted": {
-          "en": "[[who]] unlocked the door with [[type]]",
-          "sv": "[[who]] låste upp dörren med [[type]]",
-          "no": "[[who]] låste opp døren med [[type]]"
+        "hint": {
+          "en": "Triggers when the lock is unlocked (any method)",
+          "no": "Utløses når låsen blir låst opp (alle metoder)"
         },
-        "tokens": [
-          {
-            "name": "who",
-            "type": "string",
-            "title": {
-              "en": "Who",
-              "sv": "Namn",
-              "no": "Navn"
-            },
-            "example": {
-              "en": "Peter"
-            }
-          },
-          {
-            "name": "type",
-            "type": "string",
-            "title": {
-              "en": "Type",
-              "sv": "Typ",
-              "no": "Type"
-            },
-            "example": {
-              "en": "Code",
-              "sv": "Kod",
-              "no": "Kode"
-            }
-          }
-        ],
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
-          },
+            "filter": "driver_id=IDLock150"
+          }
+        ],
+        "tokens": [
           {
-            "name": "who",
-            "type": "autocomplete",
-            "placeholder": {
-              "en": "Type name...",
-              "sv": "Ange namn..",
-              "no": "Angi navn..."
-            },
+            "name": "method",
+            "type": "string",
             "title": {
-              "en": "Who",
-              "sv": "Namn",
-              "no": "Navn"
+              "en": "Method",
+              "no": "Metode"
+            },
+            "example": {
+              "en": "PIN code",
+              "no": "PIN-kode"
             }
           },
           {
-            "name": "type",
-            "type": "dropdown",
-            "placeholder": {
-              "en": "Choose a value...",
-              "sv": "Välj en typ...",
-              "no": "Velg en type..."
-            },
+            "name": "pin_location",
+            "type": "number",
             "title": {
-              "en": "Type",
-              "sv": "Typ",
-              "no": "Type"
+              "en": "PIN location",
+              "no": "PIN plassering"
             },
-            "values": [
-              {
-                "id": "any",
-                "label": {
-                  "en": "Any",
-                  "sv": "Alla",
-                  "no": "Alle"
-                }
-              },
-              {
-                "id": "code",
-                "label": {
-                  "en": "Code",
-                  "sv": "Kod",
-                  "no": "Kode"
-                }
-              },
-              {
-                "id": "tag",
-                "label": {
-                  "en": "Tag",
-                  "sv": "Tag",
-                  "no": "Tag"
-                }
-              },
-              {
-                "id": "automatic",
-                "label": {
-                  "en": "Automatic",
-                  "sv": "Automatiskt",
-                  "no": "Automatisk"
-                }
-              },
-              {
-                "id": "button",
-                "label": {
-                  "en": "Button",
-                  "sv": "Knapp/vred",
-                  "no": "Knapp"
-                }
-              },
-              {
-                "id": "homey",
-                "label": {
-                  "en": "Homey"
-                }
-              }
-            ]
+            "example": 1
           }
         ]
       },
@@ -302,7 +133,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
+            "filter": "driver_id=IDlock202"
           }
         ]
       },
@@ -345,7 +176,76 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
+            "filter": "driver_id=IDlock202"
+          }
+        ]
+      },
+      {
+        "id": "performance_alert_triggered",
+        "title": {
+          "en": "A performance alert is triggered",
+          "no": "Et ytelsesvarsel er utløst"
+        },
+        "titleFormatted": {
+          "en": "Performance alert is triggered",
+          "no": "Ytelsesvarsel er utløst"
+        },
+        "hint": {
+          "en": "Triggers when a device reports performance issues",
+          "no": "Utløses når en enhet rapporterer ytelsesproblemer"
+        },
+        "tokens": [
+          {
+            "name": "alert_type",
+            "type": "string",
+            "title": {
+              "en": "Alert Type",
+              "no": "Varseltype"
+            },
+            "example": {
+              "en": "memory",
+              "no": "minne"
+            }
+          },
+          {
+            "name": "alert_level",
+            "type": "string",
+            "title": {
+              "en": "Alert Level",
+              "no": "Varselnivå"
+            },
+            "example": {
+              "en": "warning",
+              "no": "advarsel"
+            }
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "title": {
+              "en": "Message",
+              "no": "Melding"
+            },
+            "example": {
+              "en": "High memory usage: 85%",
+              "no": "Høy minnebruk: 85%"
+            }
+          },
+          {
+            "name": "value",
+            "type": "number",
+            "title": {
+              "en": "Value",
+              "no": "Verdi"
+            },
+            "example": 85
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=IDLock150"
           }
         ]
       },
@@ -388,12 +288,55 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
+            "filter": "driver_id=IDlock202"
           }
         ]
       }
     ],
     "conditions": [
+      {
+        "id": "autolock_enabled",
+        "title": {
+          "en": "Auto lock !{{is|is not}} enabled",
+          "no": "Automatisk låsing !{{er|er ikke}} aktivert"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=IDLock150"
+          }
+        ]
+      },
+      {
+        "id": "battery_level",
+        "title": {
+          "en": "Battery level is below...",
+          "no": "Batterinivået er under..."
+        },
+        "titleFormatted": {
+          "en": "Battery level is [[value]]%",
+          "no": "Batterinivået er [[value]]%"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=IDlock202"
+          },
+          {
+            "name": "value",
+            "type": "number",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "title": {
+              "en": "Percentage",
+              "no": "Prosent"
+            }
+          }
+        ]
+      },
       {
         "id": "door_locking",
         "title": {
@@ -410,7 +353,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
+            "filter": "driver_id=IDlock202"
           },
           {
             "name": "who",
@@ -506,7 +449,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
+            "filter": "driver_id=IDlock202"
           },
           {
             "name": "who",
@@ -585,9 +528,167 @@
             ]
           }
         ]
+      },
+      {
+        "id": "is_locked",
+        "title": {
+          "en": "Lock !{{is|is not}} locked",
+          "no": "Lås !{{er|er ikke}} låst"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=IDLock150"
+          }
+        ]
+      },
+      {
+        "id": "performance_alert",
+        "title": {
+          "en": "Device has performance alerts",
+          "no": "Enhet har ytelsesvarsel"
+        },
+        "titleFormatted": {
+          "en": "!{{Has|Does not have}} [[alert_type]] alert",
+          "no": "!{{Har|Har ikke}} [[alert_type]] varsel"
+        },
+        "hint": {
+          "en": "Check if a device has active performance alerts (memory, CPU, battery)",
+          "no": "Sjekk om en enhet har aktive ytelsesvarsel (minne, CPU, batteri)"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=IDLock150"
+          },
+          {
+            "name": "alert_type",
+            "type": "dropdown",
+            "title": {
+              "en": "Alert Type",
+              "no": "Varseltype"
+            },
+            "values": [
+              {
+                "id": "any",
+                "title": {
+                  "en": "Any alert",
+                  "no": "Hvilket som helst varsel"
+                }
+              },
+              {
+                "id": "memory",
+                "title": {
+                  "en": "Memory usage",
+                  "no": "Minnebruk"
+                }
+              },
+              {
+                "id": "battery",
+                "title": {
+                  "en": "Battery level",
+                  "no": "Batterinivå"
+                }
+              }
+            ]
+          }
+        ]
       }
     ],
     "actions": [
+      {
+        "id": "generate_performance_report",
+        "title": {
+          "en": "Generate performance report",
+          "no": "Generer ytelsesrapport"
+        },
+        "titleFormatted": {
+          "en": "Generate [[format]] report for [[timespan]]",
+          "no": "Generer [[format]] rapport for [[timespan]]"
+        },
+        "hint": {
+          "en": "Creates a detailed performance report with memory, CPU, and battery metrics",
+          "no": "Lager en detaljert ytelsesrapport med minne-, CPU- og batteridata"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=IDLock150"
+          },
+          {
+            "name": "format",
+            "type": "dropdown",
+            "title": {
+              "en": "Report Format",
+              "no": "Rapportformat"
+            },
+            "values": [
+              {
+                "id": "text",
+                "title": {
+                  "en": "Text summary",
+                  "no": "Tekstsammendrag"
+                }
+              },
+              {
+                "id": "timeline",
+                "title": {
+                  "en": "Timeline visualization",
+                  "no": "Tidslinjevisualisering"
+                }
+              },
+              {
+                "id": "summary",
+                "title": {
+                  "en": "Summary visualization",
+                  "no": "Sammendragsvisualisering"
+                }
+              }
+            ]
+          },
+          {
+            "name": "timespan",
+            "type": "dropdown",
+            "title": {
+              "en": "Time Period",
+              "no": "Tidsperiode"
+            },
+            "values": [
+              {
+                "id": "hour",
+                "title": {
+                  "en": "Last hour",
+                  "no": "Siste time"
+                }
+              },
+              {
+                "id": "day",
+                "title": {
+                  "en": "Last 24 hours",
+                  "no": "Siste 24 timer"
+                }
+              },
+              {
+                "id": "week",
+                "title": {
+                  "en": "Last 7 days",
+                  "no": "Siste 7 dager"
+                }
+              },
+              {
+                "id": "all",
+                "title": {
+                  "en": "All available data",
+                  "no": "Alle tilgjengelige data"
+                }
+              }
+            ]
+          }
+        ]
+      },
       {
         "id": "set_awaymode",
         "title": {
@@ -603,7 +704,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=IDlock150"
+            "filter": "driver_id=IDlock202"
           },
           {
             "name": "mode",
@@ -662,54 +763,172 @@
       "capabilities": [
         "locked",
         "measure_battery",
-        "alarm_battery",
-        "autolock_enabled",
-        "autolock_time"
+        "contact_alarm",
+        "onoff",
+        "dim"
       ],
-      "zwave": {
-        "manufacturerId": 635,
-        "productTypeId": 1,
-        "productId": 770,
-        "zwaveSecure": true,
-        "learnmode": {
-          "image": "/drivers/IDlock202/assets/learnmode.svg",
-          "instruction": {
-            "en": "1. Press and hold key button (3 sec)\n2. Enter [Master PIN] + [*]\n3. Enter [9] + [*]\n4. Enter [1]",
-            "no": "1. Hold nøkkelknappen (3 sek)\n2. Tast [Master PIN] + [*]\n3. Tast [9] + [*]\n4. Tast [1]"
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "Auto Lock",
+            "no": "Auto-lås"
           }
         },
-        "excludemode": {
-          "image": "/drivers/IDlock202/assets/learnmode.svg",
+        "dim": {
+          "title": {
+            "en": "Auto Lock Delay",
+            "no": "Auto-lås forsinkelse"
+          },
+          "min": 5,
+          "max": 30,
+          "step": 5,
+          "units": {
+            "en": "seconds",
+            "no": "sekunder"
+          }
+        },
+        "contact_alarm": {
+          "title": {
+            "en": "Door State",
+            "no": "Dørstatus"
+          }
+        },
+        "locked": {
+          "title": {
+            "en": "Lock State",
+            "no": "Låsestatus"
+          }
+        },
+        "measure_battery": {
+          "title": {
+            "en": "Battery",
+            "no": "Batteri"
+          }
+        }
+      },
+      "settings": [
+        {
+          "id": "monitoringEnabled",
+          "type": "checkbox",
+          "value": true,
+          "label": {
+            "en": "Enable performance monitoring",
+            "no": "Aktiver ytelsesovervåking"
+          }
+        },
+        {
+          "id": "monitoringInterval",
+          "type": "number",
+          "value": 5,
+          "label": {
+            "en": "Monitoring interval",
+            "no": "Overvåkingsintervall"
+          },
+          "hint": {
+            "en": "How often to collect metrics (minutes)",
+            "no": "Hvor ofte data samles inn (minutter)"
+          },
+          "min": 1,
+          "max": 60,
+          "step": 1
+        },
+        {
+          "id": "batteryWarningThreshold",
+          "type": "number",
+          "value": 15,
+          "label": {
+            "en": "Battery warning threshold (%)",
+            "no": "Batterivarselsgrense (%)"
+          },
+          "hint": {
+            "en": "Battery percentage to trigger warning",
+            "no": "Batteriprosent for å utløse varsel"
+          },
+          "min": 5,
+          "max": 50,
+          "step": 5
+        },
+        {
+          "id": "memoryWarningThreshold",
+          "type": "number",
+          "value": 85,
+          "label": {
+            "en": "Memory warning threshold (%)",
+            "no": "Minnebruksgrense (%)"
+          },
+          "hint": {
+            "en": "Memory usage percentage to trigger warning",
+            "no": "Minnebruk i prosent for å utløse varsel"
+          },
+          "min": 50,
+          "max": 95,
+          "step": 5
+        },
+        {
+          "id": "performanceStatus",
+          "type": "label",
+          "value": "Monitoring active",
+          "label": {
+            "en": "Status",
+            "no": "Status"
+          }
+        }
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "zwave"
+      ],
+      "zwave": {
+        "manufacturerId": 883,
+        "productTypeId": 3,
+        "productId": 1,
+        "productDocumentation": "https://products.z-wavealliance.org/products/2845",
+        "zwaveAllianceProductId": 2845,
+        "requireSecure": true,
+        "sec2": false,
+        "secureInclusionExclusively": true,
+        "learnmode": {
+          "image": "/drivers/IDLock150/assets/learnmode.svg",
           "instruction": {
-            "en": "1. Press and hold key button (3 sec)\n2. Enter [Master PIN] + [*]\n3. Enter [9] + [*]\n4. Enter [2]",
-            "no": "1. Hold nøkkelknappen (3 sek)\n2. Tast [Master PIN] + [*]\n3. Tast [9] + [*]\n4. Tast [2]"
+            "en": "Follow these steps carefully:\n\n1. Make sure the lock is awake (press any button)\n2. In Homey, click the + button to add device\n3. On the lock keypad enter: * 9 # 1 followed by the Master PIN\n4. Press # to specifically request secure inclusion\n5. The lock will show a rotating pattern during inclusion\n6. Wait for the inclusion process to complete\n\nNOTE: If the process fails, remove the lock first:\n1. In Homey, remove the device\n2. On the lock enter: * 9 # 3 followed by Master PIN\n3. Try inclusion again",
+            "no": "Følg disse trinnene nøye:\n\n1. Påse at låsen er våken (trykk en vilkårlig tast)\n2. I Homey, klikk + knappen for å legge til enhet\n3. På låsens tastatur tast inn: * 9 # 1 etterfulgt av Master PIN\n4. Trykk # for å spesifikt be om sikker inkludering\n5. Låsen vil vise et roterende mønster under inkludering\n6. Vent til inkluderingsprosessen er fullført\n\nMERK: Hvis prosessen feiler, fjern låsen først:\n1. I Homey, fjern enheten\n2. På låsen tast inn: * 9 # 3 etterfulgt av Master PIN\n3. Prøv inkludering på nytt"
           }
         },
         "associationGroups": [
           1
         ],
-        "commandClasses": {
-          "supported": [
-            "COMMAND_CLASS_ZWAVEPLUS_INFO",
-            "COMMAND_CLASS_SECURITY_2",
-            "COMMAND_CLASS_DOOR_LOCK",
-            "COMMAND_CLASS_BATTERY",
-            "COMMAND_CLASS_NOTIFICATION"
-          ],
-          "controlled": [
-            "BASIC"
-          ]
-        }
+        "associationGroupsOptions": {
+          "1": {
+            "hint": {
+              "en": "Lifeline association group",
+              "no": "Lifeline assosiasjonsgruppe"
+            }
+          }
+        },
+        "defaultConfiguration": [
+          {
+            "id": 1,
+            "size": 1,
+            "value": 0
+          },
+          {
+            "id": 5,
+            "size": 1,
+            "value": 0
+          }
+        ]
       },
-      "id": "IDlock202"
+      "id": "IDLock150"
     }
   ],
   "capabilities": {
     "autolock_enabled": {
       "type": "boolean",
       "title": {
-        "en": "Auto Lock",
-        "no": "Automatisk låsing"
+        "en": "Auto lock",
+        "no": "Auto-lås"
       },
       "getable": true,
       "setable": true,
@@ -719,20 +938,224 @@
     "autolock_time": {
       "type": "number",
       "title": {
-        "en": "Auto Lock Delay",
-        "no": "Forsinkelse automatisk låsing"
+        "en": "Auto Lock Time",
+        "no": "Automatisk låsetid"
       },
       "units": {
         "en": "seconds",
         "no": "sekunder"
       },
-      "min": 10,
+      "min": 0,
       "max": 240,
       "step": 1,
+      "decimals": 0,
+      "chartType": "stepLine",
+      "insights": true,
       "getable": true,
       "setable": true,
       "uiComponent": "slider",
-      "icon": "/assets/capability_icons/timer.svg"
+      "icon": "/assets/timer.svg",
+      "values": []
+    },
+    "away_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Away Mode",
+        "no": "Borte modus"
+      },
+      "desc": {
+        "en": "Enable/disable away mode (extra security)",
+        "no": "Aktiver/deaktiver borte modus (ekstra sikkerhet)"
+      },
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/away.svg",
+      "uiQuickAction": false,
+      "values": [
+        {
+          "id": "true",
+          "title": {
+            "en": "Away",
+            "no": "Borte"
+          }
+        },
+        {
+          "id": "false",
+          "title": {
+            "en": "Home",
+            "no": "Hjemme"
+          }
+        }
+      ]
+    },
+    "contact_alarm": {
+      "type": "boolean",
+      "title": {
+        "en": "Door contact",
+        "no": "Dørkontakt"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/locked.svg"
+    },
+    "locked": {
+      "type": "boolean",
+      "title": {
+        "en": "Locked",
+        "no": "Låst"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "insights": true,
+      "insightsTitleTrue": {
+        "en": "Locked",
+        "no": "Låst"
+      },
+      "insightsTitleFalse": {
+        "en": "Unlocked",
+        "no": "Ulåst"
+      },
+      "values": [
+        {
+          "id": "true",
+          "title": {
+            "en": "Locked",
+            "no": "Låst"
+          }
+        },
+        {
+          "id": "false",
+          "title": {
+            "en": "Unlocked",
+            "no": "Ulåst"
+          }
+        }
+      ]
+    },
+    "measure_battery": {
+      "type": "number",
+      "title": {
+        "en": "Battery",
+        "no": "Batteri"
+      },
+      "desc": {
+        "en": "Battery level percentage",
+        "no": "Batterinivå i prosent"
+      },
+      "units": "%",
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "chartType": "stepLine",
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "insightsOptions": {
+        "includeUpdatedAt": true,
+        "discreteSteps": true
+      },
+      "values": [],
+      "conditions": [
+        {
+          "id": "battery_low",
+          "title": {
+            "en": "Battery is !{{low|not low}}",
+            "no": "Batteriet er !{{lavt|ikke lavt}}"
+          }
+        }
+      ],
+      "triggers": [
+        {
+          "id": "battery_low",
+          "title": {
+            "en": "Battery level dropped below",
+            "no": "Batterinivå falt under"
+          },
+          "tokens": [
+            {
+              "name": "battery_level",
+              "type": "number",
+              "title": {
+                "en": "Level",
+                "no": "Nivå"
+              }
+            }
+          ],
+          "args": [
+            {
+              "name": "threshold",
+              "type": "number",
+              "title": {
+                "en": "Level (%)",
+                "no": "Nivå (%)"
+              },
+              "placeholder": {
+                "en": "20",
+                "no": "20"
+              },
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          ]
+        }
+      ]
+    },
+    "performance_report_btn": {
+      "type": "boolean",
+      "title": {
+        "en": "Generate Performance Report",
+        "no": "Generer ytelsesrapport"
+      },
+      "desc": {
+        "en": "Generate a performance report with memory, CPU, and battery metrics",
+        "no": "Generer en ytelsesrapport med minne-, CPU- og batteridata"
+      },
+      "getable": false,
+      "setable": true,
+      "insights": false,
+      "uiComponent": "button",
+      "maintenanceAction": true,
+      "values": []
+    },
+    "user_code": {
+      "type": "string",
+      "title": {
+        "en": "User Code",
+        "no": "Brukerkode"
+      },
+      "desc": {
+        "en": "PIN code for door lock",
+        "no": "PIN-kode for dørlås"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "insights": false,
+      "options": {
+        "type": "password"
+      },
+      "values": [
+        {
+          "id": "add",
+          "title": {
+            "en": "Add code",
+            "no": "Legg til kode"
+          }
+        },
+        {
+          "id": "remove",
+          "title": {
+            "en": "Remove code",
+            "no": "Fjern kode"
+          }
+        }
+      ]
     }
   }
 }

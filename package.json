@@ -1,39 +1,68 @@
 {
-  "name": "com.arn.idlockzwave",
-  "version": "1.0.0",
-  "description": "IDLock Z-Wave app for Homey",
-  "main": "app.js",
-  "author": {
-    "name": "ArnBdev"
-  },
-  "license": "MIT",
-  "homepage": "https://homey.app/no-no/app/com.arn.idlockzwave/",
-  "private": true,
-  "keywords": [
-    "homey",
-    "idlock",
-    "zwave",
-    "smart-lock"
-  ],
-  "scripts": {
-    "test": "jest"
-  },
-  "devDependencies": {
-    "jest": "^29.0.0",
-    "eslint": "7.32.0",
-    "eslint-config-athom": "3.1.1"
-  },
-  "dependencies": {
-    "homey-zwavedriver": "^2.1.8"
-  },
-  "engines": {
-    "node": ">=12.0.0",
-    "homey": ">=5.0.0"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^homey$": "<rootDir>/__mocks__/homey.js",
-      "^homey-zwavedriver$": "<rootDir>/__mocks__/homey-zwavedriver.js"
-    }
-  }
+    "name": "com.idlock",
+    "version": "2.0.0",
+    "main": "app.js",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "dependencies": {
+        "homey-zwavedriver": "^2.1.8"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.22.0",
+        "@babel/plugin-transform-modules-commonjs": "^7.22.0",
+        "@babel/preset-env": "^7.22.0",
+        "babel-jest": "^29.0.0",
+        "canvas": "^2.11.0",
+        "jest": "^29.0.0",
+        "jest-mock": "^29.0.0",
+        "sharp": "^0.32.1"
+    },
+    "scripts": {
+        "validate-files": "node validate.js",
+        "validate": "NODE_ENV=production npm run validate-files && homey app validate",
+        "test": "NODE_ENV=test jest",
+        "test:watch": "NODE_ENV=test jest --watch",
+        "test:coverage": "NODE_ENV=test jest --coverage",
+        "build": "npm run validate && homey app build",
+        "deploy": "npm run validate && homey app deploy",
+        "start": "npm run validate && homey app run",
+        "setup": "node setup.js",
+        "clean": "node clean.js",
+        "prepare": "npm run setup && npm run validate-files",
+        "verify": "npm run validate && npm run test",
+        "screenshots": "node scripts/generate-screenshots.js",
+        "optimize-images": "node scripts/optimize-images.js",
+        "store-assets": "npm run screenshots && npm run optimize-images && node scripts/store-assets.js verify",
+        "store-prepare": "npm run clean && npm run store-assets",
+        "release": "npm run store-prepare && npm run build && npm version minor && homey app publish"
+    },
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/idlock/com.idlock.git"
+    },
+    "homepage": "https://idlock.no",
+    "author": {
+        "name": "ID Lock AS",
+        "email": "support@idlock.no",
+        "url": "https://idlock.no"
+    },
+    "bugs": {
+        "url": "https://github.com/idlock/com.idlock/issues"
+    },
+    "keywords": [
+        "homey",
+        "smart-lock",
+        "zwave",
+        "idlock",
+        "security"
+    ],
+    "contributors": [
+        {
+            "name": "ID Lock Development Team",
+            "email": "dev@idlock.no"
+        }
+    ],
+    "license": "SEE LICENSE IN LICENSE"
 }

@@ -1,6 +1,35 @@
-tests
-renovate.json
-LICENSE
+# Development files
+.git
+.gitignore
+.gitattributes
+.github
+.homeybuild
+.homeycompose
+node_modules
+coverage
+jest.config.js
+jest.setup.js
+babel.config.js
+rollup.config.js
+test
+tools
+*.test.js
+*.spec.js
+
+# Documentation
+docs
 *.md
 README*
-log
+CHANGELOG*
+LICENSE*
+
+# Development tools
+.eslintrc*
+.prettierrc*
+.editorconfig
+tsconfig.json
+
+# Misc
+*.log
+.DS_Store
+Thumbs.db

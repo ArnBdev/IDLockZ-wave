@@ -1,0 +1,138 @@
+name: Performance Monitoring
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Full history for trend analysis
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run benchmarks
+      run: node scripts/benchmark.js
+
+    - name: Analyze trends
+      run: node scripts/analyze-trends.js
+
+    - name: Check performance regression
+      id: check-performance
+      run: |
+        REPORT=$(cat trend-report.md)
+        if echo "$REPORT" | grep -q "🔴"; then
+          echo "::warning::Performance regression detected!"
+          echo "regression=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create issue on regression
+      if: steps.check-performance.outputs.regression == 'true'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('trend-report.md', 'utf8');
+          
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repository,
+            title: '🚨 Performance Regression Detected',
+            body: report,
+            labels: ['performance', 'regression']
+          });
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: |
+          benchmark-results.json
+          benchmark-trends.png
+          trend-report.md
+
+    - name: Update performance dashboard
+      if: github.ref == 'refs/heads/main'
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        
+        # Create or update performance branch
+        git checkout -B performance-metrics
+        
+        # Copy results to docs folder
+        mkdir -p docs/performance
+        cp benchmark-trends.png docs/performance/
+        cp trend-report.md docs/performance/
+        
+        # Update index
+        cat > docs/performance/index.md << EOL
+        # Performance Dashboard
+        
+        Last updated: $(date -u)
+        
+        ![Performance Trends](benchmark-trends.png)
+        
+        $(cat trend-report.md)
+        EOL
+        
+        # Commit and push
+        git add docs/performance
+        git commit -m "Update performance metrics [skip ci]"
+        git push origin performance-metrics --force
+
+    - name: Create PR for metrics update
+      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data: prs } = await github.rest.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            head: 'performance-metrics',
+            state: 'open'
+          });
+          
+          if (prs.length === 0) {
+            await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Update Performance Metrics',
+              head: 'performance-metrics',
+              base: 'main',
+              body: 'Automated performance metrics update'
+            });
+          }
+
+  notify:
+    needs: benchmark
+    if: failure()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Send notification
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repository,
+            title: '⚠️ Performance Test Failure',
+            body: 'The performance monitoring workflow has failed. Please investigate.',
+            labels: ['bug', 'performance']
+          });

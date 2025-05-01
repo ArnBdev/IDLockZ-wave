@@ -1,18 +1,62 @@
 {
-    "triggersTitle": "Triggers",
-    "triggerSomeoneTitle": "Trigger 'Noen låste opp døren' med følgende:",
-    "homey": "Homey",
-    "code": "Kode",
-    "tag": "Tag",
-    "button": "Knapp",
-    "auto": "Auto",
-    "codesTitle" : "Kode/Tag Mappings",
-    "codesName" : "Navn",
-    "codesIndex" : "Index",
-    "codesType": "Type",
-    "codesEdit" : "Rediger",
-    "codesSave" : "Lagre",
-    "codesCancel" : "Avbryt",
-    "codesDelete" : "Slett",
-    "codesAddCode" : "Ny Kode/Tag"
-   }
+    "settings": {
+        "general": {
+            "title": "Generelle innstillinger"
+        },
+        "autolock": {
+            "title": "Automatisk lås",
+            "enable": "Aktiver automatisk lås",
+            "time": "Låsetid",
+            "seconds": "sekunder"
+        },
+        "security": {
+            "title": "Sikkerhet",
+            "awayMode": "Borte modus",
+            "hint": "Økt sikkerhet når du er borte"
+        },
+        "codes": {
+            "title": "Brukerkoder",
+            "add": "Legg til ny kode",
+            "table": {
+                "name": "Navn",
+                "code": "Kode",
+                "expiry": "Utløpsdato",
+                "actions": "Handlinger"
+            },
+            "prompts": {
+                "name": "Skriv inn brukernavn:",
+                "code": "Skriv inn PIN-kode (4-10 siffer):",
+                "expiry": "Skriv inn utløpsdato (ÅÅÅÅ-MM-DD) eller la stå tomt:",
+                "invalidCode": "Ugyldig kodeformat. Må være 4-10 siffer.",
+                "invalidDate": "Ugyldig datoformat. Bruk ÅÅÅÅ-MM-DD.",
+                "deleteConfirm": "Er du sikker på at du vil slette koden for"
+            }
+        },
+        "logs": {
+            "title": "Adgangslogg",
+            "clear": "Tøm logg",
+            "clearConfirm": "Er du sikker på at du vil tømme adgangsloggen?",
+            "table": {
+                "time": "Tid",
+                "action": "Handling",
+                "user": "Bruker"
+            }
+        },
+        "save": "Lagre endringer",
+        "saved": "Innstillinger lagret!",
+        "error": "Det oppstod en feil:"
+    },
+    "status": {
+        "door": {
+            "locked": "Låst",
+            "unlocked": "Ulåst"
+        },
+        "actions": {
+            "lock": "Lås",
+            "unlock": "Lås opp",
+            "codeAdded": "Kode lagt til",
+            "codeDeleted": "Kode slettet",
+            "codeModified": "Kode endret"
+        }
+    }
+}

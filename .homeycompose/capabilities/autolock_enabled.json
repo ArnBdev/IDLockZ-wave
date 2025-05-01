@@ -1,8 +1,8 @@
 {
   "type": "boolean",
   "title": {
-    "en": "Auto Lock",
-    "no": "Automatisk låsing"
+    "en": "Auto lock",
+    "no": "Auto-lås"
   },
   "getable": true,
   "setable": true,

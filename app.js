@@ -1,68 +1,131 @@
-'use strict'
+'use strict';
 
-const Homey = require('homey')
+const Homey = require('homey');
 
-class IDLock extends Homey.App {
-  onInit () {
-    this.log('IDLock is running...')
+class IDLockApp extends Homey.App {
+    /**
+     * onInit is called when the app is initialized
+     */
+    async onInit() {
+        try {
+            this.log('ID Lock app is initializing...');
 
-    // Triggers
+            // Register flow cards
+            await this.registerFlowCards();
 
-    const doorLockTrigger = this.homey.flow.getDeviceTriggerCard('door_lock')
-    doorLockTrigger.registerRunListener(this.onTypeWhoMatchTrigger.bind(this))
-    doorLockTrigger.getArgument('who').registerAutocompleteListener(this.onWhoAutoComplete.bind(this))
+            // Register app-level event handlers
+            await this.registerEventListeners();
 
-    const doorUnlockTrigger = this.homey.flow.getDeviceTriggerCard('door_unlock')
-    doorUnlockTrigger.registerRunListener(this.onTypeWhoMatchTrigger.bind(this))
-    doorUnlockTrigger.getArgument('who').registerAutocompleteListener(this.onWhoAutoComplete.bind(this))
+            // Initialize any app-level settings
+            await this.initializeSettings();
 
-    // Conditions
+            this.log('ID Lock app has been initialized');
+        } catch (error) {
+            this.error('Failed to initialize app:', error);
+            throw error;
+        }
+    }
 
-    // These conditions have no real use as they only check whats given to them by the condition card
-    // I'll just give them a new runListener so they don't throw errors in a flow.
-    // The only way these conditions will work (but have no use at all) is if the condition card is set to check Name "Any" and Type "All" (no other Name or Type will return true...)
+    /**
+     * Register app-level event listeners
+     */
+    async registerEventListeners() {
+        // Listen for app-level events
+        this.homey.on('unload', () => {
+            this.log('App is unloading...');
+            // Clean up any monitoring
+            this.cleanupMonitoring();
+        });
 
-    const doorLocking = this.homey.flow.getConditionCard('door_locking')
-    doorLocking.registerRunListener(this.onTypeWhoMatchCondition.bind(this))
-    doorLocking.getArgument('who').registerAutocompleteListener(this.onWhoAutoComplete.bind(this))
+        this.homey.on('ready', () => {
+            this.log('App is ready');
+        });
+    }
 
-    const doorUnlocking = this.homey.flow.getConditionCard('door_unlocking')
-    doorUnlocking.registerRunListener(this.onTypeWhoMatchCondition.bind(this))
-    doorUnlocking.getArgument('who').registerAutocompleteListener(this.onWhoAutoComplete.bind(this))
+    /**
+     * Initialize app settings
+     */
+    async initializeSettings() {
+        // Get app manifest for version info
+        const manifest = this.homey.manifest;
+        this.log(`App version: ${manifest.version}`);
 
-    // Actions
+        // Log some diagnostic information
+        this.log('System information:');
+        this.log('- Homey version:', this.homey.version);
+        this.log('- App SDK version:', manifest.sdk);
+        this.log('- Node.js version:', process.version);
 
-    this.homey.flow.getActionCard('set_awaymode').registerRunListener((args, state) => {
-      return args.device.awaymodeActionRunListener(args, state)
-    })
-  }
+        // Initialize default monitoring settings if needed
+        if (!this.homey.settings.get('monitoringDefaults')) {
+            this.homey.settings.set('monitoringDefaults', {
+                enabled: true,
+                interval: 300000,      // 5 minutes
+                storageLimit: 1000,    // 1000 samples
+                batteryWarning: 15,    // 15%
+                memoryWarning: 0.85    // 85%
+            });
+        }
+    }
 
-  onTypeWhoMatchTrigger (args, state) {
-    this.log('-- TRIGGER --')
-    this.log('args.type:', args.type)
-    this.log('args.who:', args.who)
-    this.log('state:', state)
+    /**
+     * Register flow cards
+     */
+    async registerFlowCards() {
+        // Register trigger card
+        this.homey.flow.getTriggerCard('performance_alert_triggered')
+            .registerRunListener(async (args, state) => {
+                // This card is triggered from the device class
+                return true;
+            });
 
-    return (args.type === state.type || args.type === 'any') && (args.who.name.toLowerCase() === state.who.toLowerCase() || args.who.name.toLowerCase() === 'any')
-  }
+        // Register condition card
+        this.homey.flow.getConditionCard('performance_alert')
+            .registerRunListener(async (args, state) => {
+                // This is handled in the device class
+                return false;
+            });
 
-  onTypeWhoMatchCondition (args, state) {
-    this.log('-- CONDITION --')
-    this.log('args.type:', args.type)
-    this.log('args.who:', args.who)
-    this.log('state:', state)
+        // Register action card
+        this.homey.flow.getActionCard('generate_performance_report')
+            .registerRunListener(async (args, state) => {
+                // This is handled in the device class
+                return true;
+            });
+    }
 
-    return (args.type === state.type || args.type === 'any') && ((typeof state.who === 'string' && args.who.name.toLowerCase() === state.who.toLowerCase()) || args.who.name.toLowerCase() === 'any')
-  }
+    /**
+     * Clean up monitoring when app unloads
+     */
+    cleanupMonitoring() {
+        try {
+            // Get all devices
+            const devices = this.homey.drivers.getDriver('IDLock150').getDevices();
+            
+            // Stop monitoring for each device
+            devices.forEach(device => {
+                if (device.monitor) {
+                    device.monitor.stopDevice(device);
+                }
+            });
+        } catch (error) {
+            this.error('Error during cleanup:', error);
+        }
+    }
 
-  onWhoAutoComplete (query, args) {
-    const distinctNames = [...new Set(JSON.parse(this.homey.settings.get('codes')).map(item => item.user))].sort()
-    let resultArray = distinctNames.map(user => { return { name: user } })
-    resultArray.unshift({ name: 'Unknown' })
-    resultArray.unshift({ name: 'Any' })
-    resultArray = resultArray.filter(result => { return result.name.toLowerCase().indexOf(query.toLowerCase()) > -1 })
-    return resultArray
-  }
+    /**
+     * Log helper for consistent format
+     */
+    log(...args) {
+        this.homey.log('[ID Lock]', ...args);
+    }
+
+    /**
+     * Error log helper for consistent format
+     */
+    error(...args) {
+        this.homey.error('[ID Lock][ERROR]', ...args);
+    }
 }
 
-module.exports = IDLock
+module.exports = IDLockApp;

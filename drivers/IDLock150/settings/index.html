@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Lock Settings</title>
+    <link rel="stylesheet" href="./idlockApp.css">
+    <link rel="stylesheet" href="./xeditable.min.css">
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <script type="text/javascript" src="./xeditable.min.js"></script>
+    <script type="text/javascript" src="./idlockApp.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- General Settings -->
+        <div class="settings-section" id="general">
+            <h2 data-i18n="settings.general.title">General Settings</h2>
+            
+            <!-- Auto Lock Settings -->
+            <div class="settings-group">
+                <h3 data-i18n="settings.autolock.title">Auto Lock</h3>
+                <div class="setting">
+                    <label>
+                        <input type="checkbox" id="autolock_enabled" />
+                        <span data-i18n="settings.autolock.enable">Enable Auto Lock</span>
+                    </label>
+                </div>
+                <div class="setting" id="autolock_time_setting">
+                    <label>
+                        <span data-i18n="settings.autolock.time">Auto Lock Time</span>
+                        <input type="number" id="autolock_time" min="0" max="240" />
+                        <span data-i18n="settings.autolock.seconds">seconds</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="settings-group">
+                <h3 data-i18n="settings.security.title">Security</h3>
+                <div class="setting">
+                    <label>
+                        <input type="checkbox" id="away_mode" />
+                        <span data-i18n="settings.security.awayMode">Away Mode</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Codes -->
+        <div class="settings-section" id="codes">
+            <h2 data-i18n="settings.codes.title">User Codes</h2>
+            <div class="settings-group">
+                <button id="add_code" data-i18n="settings.codes.add">Add New Code</button>
+                <table id="user_codes_table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="settings.codes.table.name">Name</th>
+                            <th data-i18n="settings.codes.table.code">Code</th>
+                            <th data-i18n="settings.codes.table.expiry">Expiry</th>
+                            <th data-i18n="settings.codes.table.actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user_codes_body">
+                        <!-- Filled dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Access Log -->
+        <div class="settings-section" id="logs">
+            <h2 data-i18n="settings.logs.title">Access Log</h2>
+            <div class="settings-group">
+                <table id="access_log_table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="settings.logs.table.time">Time</th>
+                            <th data-i18n="settings.logs.table.action">Action</th>
+                            <th data-i18n="settings.logs.table.user">User</th>
+                        </tr>
+                    </thead>
+                    <tbody id="access_log_body">
+                        <!-- Filled dynamically -->
+                    </tbody>
+                </table>
+                <button id="clear_log" data-i18n="settings.logs.clear">Clear Log</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="save" class="right" data-i18n="settings.save">Save Changes</button>
+</body>
+</html>

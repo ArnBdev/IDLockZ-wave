@@ -1,7 +1,19 @@
-env.json
 node_modules/
-log
-.vs/
+env.json
+*.log
+.homeyplugins/
+.homeycompose/
+.vscode/
+build/
+dist/
+tmp/
+.DS_Store
+.env
+*.sublime-project
+*.sublime-workspace
+.idea/
+env.*.json
+
 
 # Added by Homey CLI
 /.homeybuild/

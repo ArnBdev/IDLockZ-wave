@@ -1,18 +1,62 @@
 {
-    "triggersTitle": "Triggers",
-    "triggerSomeoneTitle": "Trigger 'Someone unlocked the door' using:",
-    "homey": "Homey",
-    "code": "Code",
-    "tag": "Tag",
-    "button": "Button",
-    "auto": "Auto",
-    "codesTitle" : "Code/Tag Mappings",
-    "codesName" : "Name",
-    "codesIndex" : "Index",
-    "codesType": "Type",
-    "codesEdit" : "Edit",
-    "codesSave" : "Save",
-    "codesCancel" : "Cancel",
-    "codesDelete" : "Delete",
-    "codesAddCode" : "Add Code/Tag"
-   }
+    "settings": {
+        "general": {
+            "title": "General Settings"
+        },
+        "autolock": {
+            "title": "Auto Lock",
+            "enable": "Enable auto lock",
+            "time": "Lock time",
+            "seconds": "seconds"
+        },
+        "security": {
+            "title": "Security",
+            "awayMode": "Away Mode",
+            "hint": "Enhanced security when away"
+        },
+        "codes": {
+            "title": "User Codes",
+            "add": "Add New Code",
+            "table": {
+                "name": "Name",
+                "code": "Code",
+                "expiry": "Expiry",
+                "actions": "Actions"
+            },
+            "prompts": {
+                "name": "Enter user name:",
+                "code": "Enter PIN code (4-10 digits):",
+                "expiry": "Enter expiry date (YYYY-MM-DD) or leave empty:",
+                "invalidCode": "Invalid code format. Must be 4-10 digits.",
+                "invalidDate": "Invalid date format. Use YYYY-MM-DD.",
+                "deleteConfirm": "Are you sure you want to delete the code for"
+            }
+        },
+        "logs": {
+            "title": "Access Log",
+            "clear": "Clear Log",
+            "clearConfirm": "Are you sure you want to clear the access log?",
+            "table": {
+                "time": "Time",
+                "action": "Action",
+                "user": "User"
+            }
+        },
+        "save": "Save Changes",
+        "saved": "Settings saved successfully!",
+        "error": "An error occurred:"
+    },
+    "status": {
+        "door": {
+            "locked": "Locked",
+            "unlocked": "Unlocked"
+        },
+        "actions": {
+            "lock": "Lock",
+            "unlock": "Unlock",
+            "codeAdded": "Code added",
+            "codeDeleted": "Code deleted",
+            "codeModified": "Code modified"
+        }
+    }
+}
