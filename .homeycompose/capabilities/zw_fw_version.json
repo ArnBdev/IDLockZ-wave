@@ -1,0 +1,18 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Z-Wave fw version",
+    "sv": "Z-Wave fw-version",
+    "no": "Z-Wave fw-versjon"
+  },
+  "desc": {
+    "en": "The firmware version of the Z-Wave module",
+    "sv": "Firmware-versionen av Z-Wave-modulen",
+    "no": "Firmware-versjonen av Z-Wave-modulen"
+  },
+  "insights": false,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/zw_version.svg"
+}

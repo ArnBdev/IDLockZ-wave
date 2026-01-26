@@ -5,8 +5,6 @@ const { ZwaveDevice } = require('homey-zwavedriver')
 // Documentation: https://Products.Z-WaveAlliance.org/ProductManual/File?folder=&filename=Manuals/2293/IDL Operational Manual EN v1.3.pdf
 
 class IDlock150 extends ZwaveDevice {
-  pre_1_6;
-
   async onNodeInit () {
     // enable debugging
     // this.enableDebug();
@@ -23,7 +21,23 @@ class IDlock150 extends ZwaveDevice {
       this.error('Failed to add capability', err);
     }
 
-    this.isPre1_6(true);
+    try {
+      if (this.hasCapability('button.fetch_zw_fw_version') === false) {
+        await this.addCapability('button.fetch_zw_fw_version');
+      }
+    } catch (err) {
+      this.error('Failed to add capability', err);
+    }
+
+    try {
+      if (this.hasCapability('zw_fw_version') === false) {
+        await this.fetch_zw_fw_version();
+      }
+    } catch (err) {
+      this.error('Failed to set Z-Wave fw version', err);
+    }
+
+    this.registerCapabilityListener('button.fetch_zw_fw_version', async () => this.fetch_zw_fw_version());
 
     this.registerCapabilityListener('button.sync_pincodes', async () => {
       let codes = JSON.parse(this.homey.settings.get('codes'));
@@ -238,26 +252,37 @@ class IDlock150 extends ZwaveDevice {
     })
   }
 
-  isPre1_6(ignoreError = false) {
-    if (this.pre_1_6 != null) return this.pre_1_6;
-    const commandClassConfiguration = this.getCommandClass('VERSION');
-    commandClassConfiguration.VERSION_GET()
-      .then((result) => {
-        const zw_version = result['Firmware 0 Version'];
-        const zw_sub_version = result['Firmware 0 Sub Version'];
-        this.pre_1_6 = zw_version < 1 || (zw_version === 1 && zw_sub_version < 6);
+  isPre1_6() {
+    if (this.hasCapability('zw_fw_version') === false) throw Error('zw_fw_version capability not found')
+    const version = this.getCapabilityValue('zw_fw_version')
+    const zw_version = version.split('.')[0]
+    const zw_sub_version = version.split('.')[1]
+    const is_pre_1_6 = zw_version < 1 || (zw_version === 1 && zw_sub_version < 6)
 
-        this.log(`Z-Wave firmware version is ${zw_version}.${zw_sub_version} - Firmware is ${this.pre_1_6?'':'not '}pre 1.6`);
-        return this.pre_1_6;
-      })
-      .catch((error) => {
-        this.error("isPre1_6() -> Failed to get lock version info: ", error);
-        if (!ignoreError) {
+    this.log(`Z-Wave firmware version is ${version} - Firmware is ${is_pre_1_6?'':'not '}pre 1.6`)
+
+    return is_pre_1_6
+  }
+
+  async fetch_zw_fw_version() {
+    const commandClassConfiguration = this.getCommandClass('VERSION');
+    return commandClassConfiguration.VERSION_GET()
+        .then(async (result) => {
+          const zw_version = result['Firmware 0 Version'];
+          const zw_sub_version = result['Firmware 0 Sub Version'];
+          this.log(`Z-Wave firmware version is ${zw_version}.${zw_sub_version}`);
+
+          if (this.hasCapability('zw_fw_version') === false) {
+            this.log('Adding capability zw_fw_version');
+            await this.addCapability('zw_fw_version');
+          }
+
+          return this.setCapabilityValue('zw_fw_version', `${zw_version}.${zw_sub_version}`)
+        })
+        .catch((error) => {
+          this.error("fetch_zw_fw_version() -> Failed to get lock version info");
           throw error;
-        } else {
-          return null;
-        }
-      });
+        });
   }
 
   setUserCode(value, userId) {

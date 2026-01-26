@@ -11,7 +11,8 @@
 		"alarm_heat",
 		"alarm_tamper",
 		"alarm_battery",
-		"button.sync_pincodes"
+		"button.sync_pincodes",
+		"button.fetch_zw_fw_version"
 	],
 	"energy": {
 		"batteries": [
@@ -58,7 +59,20 @@
 			"desc": {
 				"en": "Saves/overwrites PIN codes in this door at the indexes configured in the ID Lock app",
 				"sv": "Lagrar/överskriver PIN-koder i denna dörr på de index som konfigurerats i ID Lock-appen",
-				"no": "Lagerer/overskriver PIN-kodene i denne døren på indeksene som er konfigurert i ID Lock-appen"
+				"no": "Lagrer/overskriver PIN-kodene i denne døren på indeksene som er konfigurert i ID Lock-appen"
+			}
+		},
+		"button.fetch_zw_fw_version": {
+			"maintenanceAction": true,
+			"title": {
+				"en": "Fetch Z-Wave firmware version",
+				"sv": "Hämta Z-Wave firmware version",
+				"no": "Hent Z-Wave firmware version"
+			},
+			"desc": {
+				"en": "Fetches the firmware version of the Z-Wave module. Necessary if the Z-Wave module is updated or replaced",
+				"sv": "Hämtar firmware-versionen för Z-Wave-modulen. Nödvändigt om Z-Wave-modulen uppdateras eller ersätts",
+				"no": "Henter firmware-versionen for Z-Wave-modulen. Nødvendig dersom Z-Wave-modulen oppdateres eller erstattes"
 			}
 		}
 	},

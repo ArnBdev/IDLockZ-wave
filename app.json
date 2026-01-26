@@ -894,7 +894,8 @@
         "alarm_heat",
         "alarm_tamper",
         "alarm_battery",
-        "button.sync_pincodes"
+        "button.sync_pincodes",
+        "button.fetch_zw_fw_version"
       ],
       "energy": {
         "batteries": [
@@ -941,7 +942,20 @@
           "desc": {
             "en": "Saves/overwrites PIN codes in this door at the indexes configured in the ID Lock app",
             "sv": "Lagrar/överskriver PIN-koder i denna dörr på de index som konfigurerats i ID Lock-appen",
-            "no": "Lagerer/overskriver PIN-kodene i denne døren på indeksene som er konfigurert i ID Lock-appen"
+            "no": "Lagrer/overskriver PIN-kodene i denne døren på indeksene som er konfigurert i ID Lock-appen"
+          }
+        },
+        "button.fetch_zw_fw_version": {
+          "maintenanceAction": true,
+          "title": {
+            "en": "Fetch Z-Wave firmware version",
+            "sv": "Hämta Z-Wave firmware version",
+            "no": "Hent Z-Wave firmware version"
+          },
+          "desc": {
+            "en": "Fetches the firmware version of the Z-Wave module. Necessary if the Z-Wave module is updated or replaced",
+            "sv": "Hämtar firmware-versionen för Z-Wave-modulen. Nödvändigt om Z-Wave-modulen uppdateras eller ersätts",
+            "no": "Henter firmware-versionen for Z-Wave-modulen. Nødvendig om Z-Wave-modulen oppdateres eller erstattes"
           }
         }
       },
@@ -1231,7 +1245,7 @@
             {
               "id": "1",
               "label": {
-                "en": "1 times used",
+                "en": "1 times use",
                 "sv": "Giltig 1 gång",
                 "no": "Gyldig 1 gang"
               }
@@ -1239,7 +1253,7 @@
             {
               "id": "2",
               "label": {
-                "en": "2 times used",
+                "en": "2 times use",
                 "sv": "Giltig 2 gånger",
                 "no": "Gyldig 2 ganger"
               }
@@ -1247,7 +1261,7 @@
             {
               "id": "3",
               "label": {
-                "en": "5 times used",
+                "en": "5 times use",
                 "sv": "Giltig 5 gånger",
                 "no": "Gyldig 5 ganger"
               }
@@ -1255,7 +1269,7 @@
             {
               "id": "4",
               "label": {
-                "en": "10 times used",
+                "en": "10 times use",
                 "sv": "Giltig 10 gånger",
                 "no": "Gyldig 10 ganger"
               }
@@ -1271,7 +1285,7 @@
             {
               "id": "8",
               "label": {
-                "en": "12 Hours used",
+                "en": "12 Hours use",
                 "sv": "Giltig 12 timmar",
                 "no": ""
               }
@@ -1279,7 +1293,7 @@
             {
               "id": "9",
               "label": {
-                "en": "24 Hours used",
+                "en": "24 Hours use",
                 "sv": "Giltig 24 timmar",
                 "no": "Gyldig 24 timer"
               }
@@ -1420,5 +1434,25 @@
         }
       ]
     }
-  ]
+  ],
+  "capabilities": {
+    "zw_fw_version": {
+      "type": "string",
+      "title": {
+        "en": "Z-Wave fw version",
+        "sv": "Z-Wave fw-version",
+        "no": "Z-Wave fw-versjon"
+      },
+      "desc": {
+        "en": "The firmware version of the Z-Wave module",
+        "sv": "Firmware-versionen av Z-Wave-modulen",
+        "no": "Firmware-versjonen av Z-Wave-modulen"
+      },
+      "insights": false,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/zw_version.svg"
+    }
+  }
 }
