@@ -5,6 +5,12 @@ const { ZwaveDevice } = require('homey-zwavedriver')
 // Documentation: https://Products.Z-WaveAlliance.org/ProductManual/File?folder=&filename=Manuals/2293/IDL Operational Manual EN v1.3.pdf
 
 class IDlock150 extends ZwaveDevice {
+  async onSettings({ oldSettings, newSettings, changedKeys }) {
+    if (changedKeys.includes('Service_PIN_code')) {
+      this.setUserCode(newSettings['Service_PIN_code'], this.isPre1_6()?2:108);
+    }
+  }
+
   async onNodeInit () {
     // enable debugging
     // this.enableDebug();
@@ -44,11 +50,14 @@ class IDlock150 extends ZwaveDevice {
       for (let i = 0; i < codes.length; i++) {
         const code = codes[i]
         if (code.type === 6 && code.pin) {
+          if (code.index > 25) {
+            throw new Error(`Index of pin code for ${code.user} is too high. Can not be above 25`)
+          }
           if (code.pin.length > 10) {
-              throw new Error(`Length of pin code for ${code.user} is too long`)
+              throw new Error(`Length of pin code for ${code.user} is too long. Max length is 10`)
           }
           if (code.pin.length < 4) {
-              throw new Error(`Length of pin code for ${code.user} is too short`)
+              throw new Error(`Length of pin code for ${code.user} is too short. Min length is 4`)
           }
           this.log(`Synchronizing code: ${code.user} - ${code.index} - *******`)
           let userId = code.index

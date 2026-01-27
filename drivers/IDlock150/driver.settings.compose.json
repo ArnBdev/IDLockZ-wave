@@ -16,8 +16,22 @@
     "id": "Door_Relock_mode"
   },
   {
-    "$extends": "Service_PIN_mode",
-    "id": "Service_PIN_mode"
+    "type": "group",
+    "label": {
+      "en": "Service PIN",
+      "sv": "Service-PIN",
+      "no": "Service-PIN"
+    },
+    "children": [
+      {
+        "$extends": "Service_PIN_mode",
+        "id": "Service_PIN_mode"
+      },
+      {
+        "$extends": "Service_PIN_code",
+        "id": "Service_PIN_code"
+      }
+    ]
   },
   {
     "$extends": "RFID_Mode",

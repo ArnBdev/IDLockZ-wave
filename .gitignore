@@ -5,3 +5,4 @@ log
 
 # Added by Homey CLI
 /.homeybuild/
+/.idea/

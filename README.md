@@ -47,8 +47,14 @@ Any requests please post them in the [ID Lock app topic on the Homey community F
 
 ## Change Log:
 
+### v 2.3.0
+* Added possibility to set the service PIN code
+* Improve Z-Wave version fetching, and only fetch it on the first startup
+* Add button for fetching Z-Wave version, in case the module has been replaced or upgraded
+
 ### v 2.2.4
 * Add capability button sync_pincodes on startup
+* Fetch the Z-Wave version from the lock on startup, and remove the index mode setting
 
 ### v 2.2.3 (test version)
 * Fixed potential crash on startup

@@ -955,7 +955,7 @@
           "desc": {
             "en": "Fetches the firmware version of the Z-Wave module. Necessary if the Z-Wave module is updated or replaced",
             "sv": "Hämtar firmware-versionen för Z-Wave-modulen. Nödvändigt om Z-Wave-modulen uppdateras eller ersätts",
-            "no": "Henter firmware-versionen for Z-Wave-modulen. Nødvendig om Z-Wave-modulen oppdateres eller erstattes"
+            "no": "Henter firmware-versionen for Z-Wave-modulen. Nødvendig dersom Z-Wave-modulen oppdateres eller erstattes"
           }
         }
       },
@@ -1217,97 +1217,122 @@
           "type": "dropdown"
         },
         {
-          "id": "Service_PIN_mode",
-          "value": "0",
+          "type": "group",
           "label": {
-            "en": "Service PIN Mode",
-            "sv": "Hantera Service PIN",
-            "no": "Service PIN-modus"
+            "en": "Service PIN",
+            "sv": "Service-PIN",
+            "no": "Service-PIN"
           },
-          "hint": {
-            "en": "This parameter (6) is a set only value, if changed locally on keypad these values are not changed on Z-wave module.",
-            "sv": "Denna parameter (6) hanterar service PIN. Parametern är en set only parameter. Om inställningen ändras på låset, kommer inte värdet i Homey att uppdateras.",
-            "no": "Denne parameteren (6) er en set-only parameter. Om instillingen endres på låsen, kommer ikke verdien i Homey til å oppdateres."
-          },
-          "zwave": {
-            "index": 6,
-            "size": 1
-          },
-          "values": [
+          "children": [
             {
-              "id": "0",
+              "id": "Service_PIN_mode",
+              "value": "0",
               "label": {
-                "en": "Deactivated (default)",
-                "sv": "Inaktiverat (standard)",
-                "no": "Deaktivert (standard)"
-              }
+                "en": "Service PIN Mode",
+                "sv": "Hantera Service PIN",
+                "no": "Service PIN-modus"
+              },
+              "hint": {
+                "en": "This parameter (6) is a set only value, if changed locally on keypad these values are not changed on Z-wave module.",
+                "sv": "Denna parameter (6) hanterar service PIN. Parametern är en set only parameter. Om inställningen ändras på låset, kommer inte värdet i Homey att uppdateras.",
+                "no": "Denne parameteren (6) er en set-only parameter. Om instillingen endres på låsen, kommer ikke verdien i Homey til å oppdateres."
+              },
+              "zwave": {
+                "index": 6,
+                "size": 1
+              },
+              "values": [
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "Deactivated (default)",
+                    "sv": "Inaktiverat (standard)",
+                    "no": "Deaktivert (standard)"
+                  }
+                },
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "1 times use",
+                    "sv": "Giltig 1 gång",
+                    "no": "Gyldig 1 gang"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "2 times use",
+                    "sv": "Giltig 2 gånger",
+                    "no": "Gyldig 2 ganger"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "5 times use",
+                    "sv": "Giltig 5 gånger",
+                    "no": "Gyldig 5 ganger"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "10 times use",
+                    "sv": "Giltig 10 gånger",
+                    "no": "Gyldig 10 ganger"
+                  }
+                },
+                {
+                  "id": "7",
+                  "label": {
+                    "en": "Always valid",
+                    "sv": "Alltid giltig",
+                    "no": "Alltid gyldig"
+                  }
+                },
+                {
+                  "id": "8",
+                  "label": {
+                    "en": "12 Hours use",
+                    "sv": "Giltig i 12 timmar",
+                    "no": "Gyldig i 12 timer"
+                  }
+                },
+                {
+                  "id": "9",
+                  "label": {
+                    "en": "24 Hours use",
+                    "sv": "Giltig i 24 timmar",
+                    "no": "Gyldig i 24 timer"
+                  }
+                },
+                {
+                  "id": "FE",
+                  "label": {
+                    "en": "Disables both PIN and Service PIN menu on door lock",
+                    "sv": "Inaktiverar PIN and Service PIN meny på låsenheten",
+                    "no": "Deaktiverer både PIN og Service PIN-meny på låsen"
+                  }
+                }
+              ],
+              "type": "dropdown"
             },
             {
-              "id": "1",
+              "id": "Service_PIN_code",
+              "value": "",
               "label": {
-                "en": "1 times use",
-                "sv": "Giltig 1 gång",
-                "no": "Gyldig 1 gang"
-              }
-            },
-            {
-              "id": "2",
-              "label": {
-                "en": "2 times use",
-                "sv": "Giltig 2 gånger",
-                "no": "Gyldig 2 ganger"
-              }
-            },
-            {
-              "id": "3",
-              "label": {
-                "en": "5 times use",
-                "sv": "Giltig 5 gånger",
-                "no": "Gyldig 5 ganger"
-              }
-            },
-            {
-              "id": "4",
-              "label": {
-                "en": "10 times use",
-                "sv": "Giltig 10 gånger",
-                "no": "Gyldig 10 ganger"
-              }
-            },
-            {
-              "id": "7",
-              "label": {
-                "en": "Always valid",
-                "sv": "Alltid giltig",
-                "no": "Alltid gyldig"
-              }
-            },
-            {
-              "id": "8",
-              "label": {
-                "en": "12 Hours use",
-                "sv": "Giltig 12 timmar",
-                "no": ""
-              }
-            },
-            {
-              "id": "9",
-              "label": {
-                "en": "24 Hours use",
-                "sv": "Giltig 24 timmar",
-                "no": "Gyldig 24 timer"
-              }
-            },
-            {
-              "id": "FE",
-              "label": {
-                "en": "Disables both PIN and Service PIN menu on door lock",
-                "sv": "Inaktiverar PIN and Service PIN meny på låsenheten",
-                "no": "Deaktiverer både PIN og Service PIN-modus på låsen"
-              }
+                "en": "Service PIN Code",
+                "sv": "Service PIN-kode",
+                "no": "Service PIN-kode"
+              },
+              "hint": {
+                "en": "PIN code for Service mode",
+                "sv": "PIN-kode for Service-modus",
+                "no": "PIN-kode for Service-modus"
+              },
+              "type": "password"
             }
-          ],
-          "type": "dropdown"
+          ]
         },
         {
           "id": "RFID_Mode",
