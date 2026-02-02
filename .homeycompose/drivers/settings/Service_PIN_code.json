@@ -1,0 +1,14 @@
+{
+	"value": "",
+	"label": {
+		"en": "Service PIN Code",
+		"sv": "Service PIN-kode",
+		"no": "Service PIN-kode"
+	},
+	"hint": {
+		"en": "PIN code for Service mode",
+		"sv": "PIN-kode for Service-modus",
+		"no": "PIN-kode for Service-modus"
+	},
+	"type": "password"
+}

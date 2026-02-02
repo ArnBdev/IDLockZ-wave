@@ -26,7 +26,7 @@
 		{
 			"id": "1",
 			"label": {
-				"en": "1 times used",
+				"en": "1 times use",
 				"sv": "Giltig 1 gång",
 				"no": "Gyldig 1 gang"
 			}
@@ -34,7 +34,7 @@
 		{
 			"id": "2",
 			"label": {
-				"en": "2 times used",
+				"en": "2 times use",
 				"sv": "Giltig 2 gånger",
 				"no": "Gyldig 2 ganger"
 			}
@@ -42,7 +42,7 @@
 		{
 			"id": "3",
 			"label": {
-				"en": "5 times used",
+				"en": "5 times use",
 				"sv": "Giltig 5 gånger",
 				"no": "Gyldig 5 ganger"
 			}
@@ -50,7 +50,7 @@
 		{
 			"id": "4",
 			"label": {
-				"en": "10 times used",
+				"en": "10 times use",
 				"sv": "Giltig 10 gånger",
 				"no": "Gyldig 10 ganger"
 			}
@@ -66,17 +66,17 @@
 		{
 			"id": "8",
 			"label": {
-				"en": "12 Hours used",
-				"sv": "Giltig 12 timmar",
-				"no": ""
+				"en": "12 Hours use",
+				"sv": "Giltig i 12 timmar",
+				"no": "Gyldig i 12 timer"
 			}
 		},
 		{
 			"id": "9",
 			"label": {
-				"en": "24 Hours used",
-				"sv": "Giltig 24 timmar",
-				"no": "Gyldig 24 timer"
+				"en": "24 Hours use",
+				"sv": "Giltig i 24 timmar",
+				"no": "Gyldig i 24 timer"
 			}
 		},
 		{
@@ -84,7 +84,7 @@
 			"label": {
 				"en": "Disables both PIN and Service PIN menu on door lock",
 				"sv": "Inaktiverar PIN and Service PIN meny på låsenheten",
-				"no": "Deaktiverer både PIN og Service PIN-modus på låsen"
+				"no": "Deaktiverer både PIN og Service PIN-meny på låsen"
 			}
 		}
 	],
