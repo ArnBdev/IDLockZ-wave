@@ -31,5 +31,8 @@
   },
   "2.3.0": {
     "en": "* Added possibility to set the service PIN code  * Improve Z-Wave version fetching, and only fetch it on the first startup  * Add button for fetching Z-Wave version, in case the module has been replaced or upgraded"
+  },
+  "2.3.1": {
+    "en": "Fix: Z-Wave settings was not saved"
   }
 }
