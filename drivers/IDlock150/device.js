@@ -7,8 +7,9 @@ const { ZwaveDevice } = require('homey-zwavedriver')
 class IDlock150 extends ZwaveDevice {
   async onSettings({ oldSettings, newSettings, changedKeys }) {
     if (changedKeys.includes('Service_PIN_code')) {
-      this.setUserCode(newSettings['Service_PIN_code'], this.isPre1_6()?2:108);
+      this.setUserCode(newSettings['Service_PIN_code'], this.isPre1_6() ? 2 : 108);
     }
+    await super.onSettings({oldSettings, newSettings, changedKeys})
   }
 
   async onNodeInit () {
