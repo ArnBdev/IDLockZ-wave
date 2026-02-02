@@ -47,6 +47,9 @@ Any requests please post them in the [ID Lock app topic on the Homey community F
 
 ## Change Log:
 
+### v 2.3.1
+* Fix: Z-Wave settings was not saved
+
 ### v 2.3.0
 * Added possibility to set the service PIN code
 * Improve Z-Wave version fetching, and only fetch it on the first startup
