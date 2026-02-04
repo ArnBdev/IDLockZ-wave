@@ -1,0 +1,28 @@
+{
+    "id": "set_auto_lock_delay",
+    "title": {
+        "en": "Set auto lock delay",
+        "no": "Sett autolås forsinkelse"
+    },
+    "titleFormatted": {
+        "en": "Set auto lock delay to [[delay]] seconds",
+        "no": "Sett autolås forsinkelse til [[delay]] sekunder"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=IDlock150"
+        },
+        {
+            "name": "delay",
+            "type": "number",
+            "min": 0,
+            "max": 3600,
+            "title": {
+                "en": "Delay (seconds)",
+                "no": "Forsinkelse (sekunder)"
+            }
+        }
+    ]
+}
