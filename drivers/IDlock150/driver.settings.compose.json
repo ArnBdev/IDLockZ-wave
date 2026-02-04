@@ -4,6 +4,10 @@
     "id": "Doorlock_mode"
   },
   {
+    "$extends": "auto_lock_delay",
+    "id": "auto_lock_delay"
+  },
+  {
     "$extends": "Doorlock_Hinge_Position",
     "id": "Doorlock_Hinge_Position"
   },

@@ -1,0 +1,17 @@
+{
+  "id": "auto_lock_delay",
+  "type": "number",
+  "label": {
+    "en": "Auto Lock Delay (seconds)",
+    "no": "Autolås forsinkelse (sekunder)",
+    "sv": "Autolås fördröjning (sekunder)"
+  },
+  "hint": {
+    "en": "Time in seconds before the door automatically locks after being closed. Setting this value > 0 will disable the lock's internal auto-lock function. Set to 0 to disable this feature.",
+    "no": "Tid i sekunder før døren låses automatisk etter at den er lukket. Hvis denne verdien settes > 0, deaktiveres låsens interne autolåsfunksjon. Sett til 0 for å deaktivere denne funksjonen.",
+    "sv": "Tid i sekunder innan dörren låses automatiskt efter att den stängts. Om detta värde sätts > 0 inaktiveras låsets interna autolåsfunktion. Sätt till 0 för att inaktivera denna funktion."
+  },
+  "value": 0,
+  "min": 0,
+  "max": 3600
+}

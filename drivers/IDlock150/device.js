@@ -9,7 +9,43 @@ class IDlock150 extends ZwaveDevice {
     if (changedKeys.includes('Service_PIN_code')) {
       this.setUserCode(newSettings['Service_PIN_code'], this.isPre1_6() ? 2 : 108);
     }
-    await super.onSettings({oldSettings, newSettings, changedKeys})
+
+    // Safety logic: Prevent conflict between internal Auto Lock and Homey-managed Auto Lock
+
+    // Case A: User enables Homey Auto Lock Delay (> 0)
+    // -> We must disable internal Auto Lock (set Doorlock_mode to Manual)
+    if (changedKeys.includes('auto_lock_delay') && newSettings.auto_lock_delay > 0) {
+      const currentMode = parseInt(newSettings.Doorlock_mode);
+      // Modes: 0=Manual, 1=Auto, 2=Away+Manual, 3=Away+Auto
+      // If Auto (1 or 3), switch to Manual (0 or 2)
+      if (currentMode === 1 || currentMode === 3) {
+        let newMode = 0; // Default to Manual
+        if (currentMode === 3) newMode = 2; // Keep Away mode if active
+
+        this.log(`Auto Lock Delay enabled (${newSettings.auto_lock_delay}s). Forcing Doorlock_mode from ${currentMode} to ${newMode} (Manual)`);
+
+        // Update the Z-Wave parameter
+        await this.configurationSet({ index: 1, size: 1 }, newMode);
+
+        // Update the local settings object so the UI reflects the change (if possible via return)
+        newSettings.Doorlock_mode = newMode.toString();
+      }
+    }
+
+    // Case B: User enables internal Auto Lock (Doorlock_mode = 1 or 3)
+    // -> We must disable Homey Auto Lock Delay (set to 0)
+    if (changedKeys.includes('Doorlock_mode')) {
+      const newMode = parseInt(newSettings.Doorlock_mode);
+      if ((newMode === 1 || newMode === 3) && newSettings.auto_lock_delay > 0) {
+        this.log(`Doorlock_mode set to Auto (${newMode}). Disabling Homey Auto Lock Delay.`);
+        newSettings.auto_lock_delay = 0;
+      }
+    }
+
+    await super.onSettings({oldSettings, newSettings, changedKeys});
+
+    // After settings are applied, re-evaluate the auto lock timer
+    this.checkAutoLock();
   }
 
   async onNodeInit () {
@@ -18,6 +54,8 @@ class IDlock150 extends ZwaveDevice {
 
     // print the node's info to the console
     // this.printNode();
+
+    this.autoLockTimer = null;
 
     try {
       if (this.hasCapability('button.sync_pincodes') === false) {
@@ -75,7 +113,7 @@ class IDlock150 extends ZwaveDevice {
         getOnOnline: false,
       },
       report: 'DOOR_LOCK_OPERATION_REPORT',
-      reportParserV2 (report) {
+      reportParserV2: (report) => {
         this.log('Door Lock Mode report:', report)
         if (report && Object.prototype.hasOwnProperty.call(report, 'Door Lock Mode')) {
           // reset alarm_tamper or alarm_heat based on Unlock report
@@ -88,7 +126,12 @@ class IDlock150 extends ZwaveDevice {
             }
             this.log('DOOR_LOCK: reset tamper and heat alarm')
           };
-          return report['Door Lock Mode'] === 'Door Secured'
+
+          const isLocked = report['Door Lock Mode'] === 'Door Secured';
+          // Check auto lock directly with the new state
+          this.checkAutoLock(isLocked, undefined);
+
+          return isLocked;
         }
         return null
       }
@@ -206,12 +249,16 @@ class IDlock150 extends ZwaveDevice {
         getOnOnline: false,
       },
       report: 'DOOR_LOCK_OPERATION_REPORT',
-      reportParserV2 (report) {
+      reportParserV2: (report) => {
         this.log('Door condition report:', report)
         if (report && Object.prototype.hasOwnProperty.call(report, 'Door Condition')) {
           this.log('Door Condition has changed:', report['Door Condition'])
           // check if Bit 0 is 1 (door closed) and return the inverse (alarm when door open)
-          return !(report['Door Condition'] & 0b001)
+          const isOpen = !(report['Door Condition'] & 0b001);
+
+          this.checkAutoLock(undefined, isOpen);
+
+          return isOpen;
         };
         return null
       }
@@ -353,6 +400,14 @@ class IDlock150 extends ZwaveDevice {
       .then(result => {
         // Also update app setting to same value
         this.setSettings({ Doorlock_mode: args.mode })
+
+        // Safety logic: If user sets mode to Auto (1 or 3), disable auto lock delay
+        const newMode = parseInt(args.mode);
+        if ((newMode === 1 || newMode === 3) && this.getSetting('auto_lock_delay') > 0) {
+           this.log(`Away mode action set to Auto (${newMode}). Disabling Homey Auto Lock Delay.`);
+           this.setSettings({ auto_lock_delay: 0 });
+        }
+
         return result
       })
   }
@@ -370,11 +425,88 @@ class IDlock150 extends ZwaveDevice {
 
           this.setCapabilityValue('locked', locked).catch(this.error);
           this.setCapabilityValue('alarm_contact', open).catch(this.error);
+
+          this.checkAutoLock(locked, open); // Check if we should lock
         })
         .catch((error) => {
           this.error("updateLockStatusActionRunListener() -> Failed to update lock status: ", error);
           throw error;
         });
+  }
+
+  async setAutoLockDelayAction(args) {
+    this.log(`---- Set Auto Lock Delay to ${args.delay} seconds ----`);
+
+    // Update setting
+    this.setSettings({ auto_lock_delay: args.delay });
+
+    // Safety logic: If delay > 0, ensure internal auto lock is disabled
+    if (args.delay > 0) {
+        const currentMode = parseInt(this.getSetting('Doorlock_mode'));
+        if (currentMode === 1 || currentMode === 3) {
+            let newMode = 0;
+            if (currentMode === 3) newMode = 2;
+
+            this.log(`Auto Lock Delay enabled via flow. Forcing Doorlock_mode from ${currentMode} to ${newMode} (Manual)`);
+            await this.configurationSet({ index: 1, size: 1 }, newMode);
+            this.setSettings({ Doorlock_mode: newMode.toString() });
+        }
+    }
+
+    this.checkAutoLock();
+    return true;
+  }
+
+  cancelAutoLock() {
+    if (this.autoLockTimer) {
+        this.log('Cancelling auto lock timer');
+        clearTimeout(this.autoLockTimer);
+        this.autoLockTimer = null;
+    }
+  }
+
+  checkAutoLock(isLocked, isOpen) {
+    const delay = this.getSetting('auto_lock_delay');
+
+    // If undefined, fallback to capability value
+    const locked = isLocked !== undefined ? isLocked : this.getCapabilityValue('locked');
+    const open = isOpen !== undefined ? isOpen : this.getCapabilityValue('alarm_contact');
+
+    // If feature disabled, or door is locked, or door is open -> cancel timer
+    if (!delay || delay <= 0 || locked || open) {
+        this.cancelAutoLock();
+        return;
+    }
+
+    // If door is unlocked AND closed AND delay > 0
+    if (!locked && !open && delay > 0) {
+        if (this.autoLockTimer) {
+            // Timer already running?
+            this.cancelAutoLock();
+        }
+
+        this.log(`Starting auto lock timer for ${delay} seconds`);
+        this.autoLockTimer = setTimeout(() => {
+            this.triggerAutoLock();
+        }, delay * 1000);
+    }
+  }
+
+  triggerAutoLock() {
+    this.log('Auto lock timer expired. Locking door...');
+    this.autoLockTimer = null;
+
+    // Check one last time conditions
+    const locked = this.getCapabilityValue('locked');
+    const open = this.getCapabilityValue('alarm_contact');
+
+    if (!locked && !open) {
+         // Trigger the locked capability logic, which sends the Z-Wave command
+         this.triggerCapabilityListener('locked', true)
+            .catch(err => this.error('Failed to trigger locked capability listener for auto lock', err));
+    } else {
+        this.log('Auto lock aborted: Door is already locked or open');
+    }
   }
 }
 module.exports = IDlock150
