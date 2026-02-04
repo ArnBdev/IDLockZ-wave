@@ -1,10 +1,10 @@
 {
 	"name": "no.idlock",
-	"version": "1.2.4",
+	"version": "2.3.2",
 	"description": "This app adds support for devices made by [ID Lock](http://www.IDLock.no).",
 	"main": "app.js",
 	"dependencies": {
-		"homey-zwavedriver": "^2.1.10"
+		"homey-zwavedriver": "^2.2.1"
 	},
 	"devDependencies": {
 		"@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.3"
